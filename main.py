@@ -1,5 +1,5 @@
-from tool.funcDoc import estraiDadosCargo, extraiCargoPath
+from tool.funcDoc import extraiCargoPath, extraiDadosCargo
 
-extraiCargoPath()
+#extraiCargoPath()
 
-estraiDadosCargo()
+extraiDadosCargo()

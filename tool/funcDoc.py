@@ -6,6 +6,7 @@ from tool.funcPage import extraiPagina
 
 date = datetime.date.today().strftime("%Y-%m-%d")
 
+
 def salvaArquivoCSV(path, name, dataFrame):
 
     if not os.path.exists(path):
@@ -14,10 +15,10 @@ def salvaArquivoCSV(path, name, dataFrame):
     return dataFrame.to_csv(path + name, index=False)
 
 
-def extraiCargoPath():
+def extraiCargoCaminhos():
   
     url = "https://www.pciconcursos.com.br/provas/"
-    filePath = "dados/path_officers/"
+    filePath = "dados/caminhos_cargos/"
 
     officersLinkList = []
 
@@ -32,24 +33,25 @@ def extraiCargoPath():
 
     officersLink = pd.DataFrame(officersLinkList, columns=['office','link'])
 
-    salvaArquivoCSV(filePath, f'path_office_{date}.csv', officersLink )
+    salvaArquivoCSV(filePath, f'caminhos_cargos_{date}.csv', officersLink )
 
 
-def lerCargoPath():
+def lerCargoCaminhos():
    
-    OfficersLink = pd.read_csv(f'dados/path_officers/path_office_{date}.csv')
+    OfficersLink = pd.read_csv(f'dados/caminhos_cargos/caminhos_cargos_{date}.csv')
 
-    return OfficersLink.values[0:2] #limitador
+    return OfficersLink.values[330:335] #limitador
 
 
-def estraiDadosCargo():
+def extraiDadosCargos():
 
   
-    for office, link in lerCargoPath():
-        name = link.split('/')[-1]+'_'+date
-
+    for office, link in lerCargoCaminhos():
+        name = link.split('/')[-1]
+        print(name)
+        
         office = office.replace(" ","_")
-        path = f'dados/data_officers/{office}/'
+        path = f'dados/dados_brutos_cargos_{date}/'
 
         ExportDF = pd.DataFrame()
         page = extraiPagina(link)
@@ -66,12 +68,10 @@ def estraiDadosCargo():
                 PageDF = pd.read_html(link, header = 0, extract_links='all')[0]
                 ExportDF = pd.concat([ExportDF, PageDF])
 
-            salvaArquivoCSV(path, name+".csv", ExportDF)
+            salvaArquivoCSV(path, name + ".csv", ExportDF)
 
         else:
             ExportDF = pd.read_html(link, header = 0, extract_links='all')[0]
 
 
             salvaArquivoCSV(path, name+".csv", ExportDF)
-
-
